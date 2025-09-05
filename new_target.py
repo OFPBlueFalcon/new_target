@@ -2,6 +2,7 @@
 
 import subprocess
 import pyfiglet
+import os
 
 banner = pyfiglet.figlet_format("NOW WE ARE HACKIN")
 print(banner)
@@ -9,10 +10,17 @@ print(banner)
 target_ip = input("What is the target's IP: ")
 target_name = input("What is the target's name: ")
 
+htb_dir = os.path.expanduser("~/htb")
+if os.path.exists(htb_dir):
+    print("Beep boop beep boop. ~/htb dir detected...")
+else:
+    print("Beep boop beep boop. Error. Error. No ~/htb dir detected. Creating directory...")
+    subprocess.run(f"mkdir {htb_dir}", shell=True)
+
 # Defines commands (variables)  for a new directory for the target and runs the nmap scan -- feel free to adjust nmap flags and location of directory 
 make_dir = f"mkdir ~/htb/{target_name}"
 ping_ip = f"ping -c 3 {target_ip}"
-nmap_scan = f"nmap -sV -sC -p- {target_ip} -o ~/htb/{target_name}/{target_name}_nmap.txt"
+nmap_scan = f"nmap -sV -sC -p- {target_ip} -oN ~/htb/{target_name}/{target_name}_nmap.txt"
 
 # pings target to ensure connection
 print(f"Pinging {target_ip}")
@@ -29,7 +37,7 @@ if run_ping_ip.returncode == 0:
     run_nmap_scan = subprocess.run(nmap_scan, shell=True, capture_output=True, text=True)
 
     print("Adding target to the hosts file...")
-    add_hosts = f"echo '{target_ip} {target_name}.htb' | sudo tee /etc/hosts" 
+    add_hosts = f"echo '{target_ip} {target_name}.htb' | sudo tee -a /etc/hosts" 
     run_add_hosts = subprocess.run(add_hosts, shell=True)
     
     print("Happy Hacking!")
