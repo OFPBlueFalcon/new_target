@@ -20,7 +20,7 @@ else:
 # Defines commands (variables)  for a new directory for the target and runs the nmap scan -- feel free to adjust nmap flags and location of directory 
 make_dir = f"mkdir ~/htb/{target_name}"
 ping_ip = f"ping -c 3 {target_ip}"
-nmap_scan = f"nmap -sV -sC -p- {target_ip} -oN ~/htb/{target_name}/{target_name}_nmap.txt"
+nmap_scan = f"nmap -sV -sC {target_ip} -oN ~/htb/{target_name}/{target_name}_nmap.txt"
 
 # pings target to ensure connection
 print(f"Pinging {target_ip}")
